@@ -1,0 +1,6 @@
+build/
+doc/
+junk/
+.vscode/
+.cache/
+toolchain*.cmake
