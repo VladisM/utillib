@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.13.0)
 project(utillib C)
 
+option(ENABLE_CALL_STACK_DUMP "Enable dump of call stack on errors. Reqire debug configuration and UNIX host." ON)
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
     add_compile_options(-g -O0)
-    IF(UNIX)
+    IF(UNIX AND ENABLE_CALL_STACK_DUMP)
         add_link_options(-rdynamic)
         add_definitions(-DENABLE_CALL_STACK_DUMP_AT_ERROR)
     ENDIF()
