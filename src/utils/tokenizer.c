@@ -34,6 +34,14 @@ static bool is_newline(tokenizer_t *this){
 }
 
 bool is_comment_start(tokenizer_t *this){
+    if(this->state.clike_comments.enabled == true){
+        if(this->state.current_char == '*' && this->state.previous_char == '/'){
+            this->state.previous_char_was_comment_mark = true;
+            this->state.clike_comments.multiline_active = true;
+            return true;
+        }
+    }
+
     if(this->state.current_char == '/' && this->state.previous_char == '/'){
         this->state.previous_char_was_comment_mark = true;
         return true;
@@ -44,7 +52,19 @@ bool is_comment_start(tokenizer_t *this){
 }
 
 bool is_comment_end(tokenizer_t *this){
-    return is_newline(this);
+    if(this->state.clike_comments.multiline_active == true){
+        if(this->state.current_char == '/' && this->state.previous_char == '*'){
+            this->state.previous_char_was_comment_mark = true;
+            this->state.clike_comments.multiline_active = false;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        return is_newline(this);
+    }
 }
 
 static bool should_skip(tokenizer_t *this){
@@ -294,6 +314,15 @@ void tokenizer_config_comment(
 
     tokenizer->methods.is_comment_end = is_comment_end;
     tokenizer->methods.is_comment_start = is_comment_start;
+}
+
+void tokenizer_config_enable_c_like_comment(
+    tokenizer_t *tokenizer
+)
+{
+    CHECK_NULL_ARGUMENT(tokenizer);
+
+    tokenizer->state.clike_comments.enabled = true;
 }
 
 void tokenizer_config_separator(
