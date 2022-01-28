@@ -14,6 +14,7 @@ static list_t *filename_cache = NULL;
 static token_t *tokenizer_token_new(char *token_data, char *filename, long line_number, long column);
 static char *filename_store(char *filename);
 static void clean_filename_cache(void);
+static void handle_two_char_comment(tokenizer_t *this);
 
 bool is_separator(tokenizer_t *this){
     switch(this->state.current_char){
@@ -33,10 +34,13 @@ static bool is_newline(tokenizer_t *this){
 }
 
 bool is_comment_start(tokenizer_t *this){
-    if(this->state.current_char == '/' && this->state.previous_char == '/')
+    if(this->state.current_char == '/' && this->state.previous_char == '/'){
+        this->state.previous_char_was_comment_mark = true;
         return true;
-    else
+    }
+    else{
         return false;
+    }
 }
 
 bool is_comment_end(tokenizer_t *this){
@@ -113,7 +117,10 @@ static void put_buffer_to_output(tokenizer_t *this){
 }
 
 static void cleanup_buffer(tokenizer_t *this){
+    char tmp = '\0';
+
     array_cleanup(this->buffer);
+    array_set(this->buffer, 0, (void *)&tmp);   //make sure there is null char
 }
 
 static void tokenize_loop(tokenizer_t *tokenizer, char *input){
@@ -135,6 +142,7 @@ static void tokenize_loop(tokenizer_t *tokenizer, char *input){
         else{
             if(t->methods.is_comment_start(t)){
                 t->state.comment_block_active = true;
+                handle_two_char_comment(t);
             }
             else if(is_string_mark(t)){
                 append_in_buffer(t);
@@ -194,6 +202,7 @@ void tokenizer_init(tokenizer_t **tokenizer){
     tokenizer_t *tmp = (tokenizer_t *)dynmem_malloc(sizeof(tokenizer_t));
 
     tmp->state.comment_block_active = false;
+    tmp->state.previous_char_was_comment_mark = false;
     tmp->state.string_block_active = false;
     tmp->state.current_char = '\0';
     tmp->state.previous_char = '\0';
@@ -367,4 +376,21 @@ static void clean_filename_cache(void){
         list_destroy(filename_cache);
         filename_cache = NULL;
     }
+}
+
+static void handle_two_char_comment(tokenizer_t *this){
+    CHECK_NULL_ARGUMENT(this);
+
+    if(this->state.previous_char_was_comment_mark == false)
+        return;
+
+    unsigned pos = 0;
+    char tmp = '\0';
+
+    while('\0' != *(char *)array_at(this->buffer, pos)){
+        pos++;
+    }
+
+    array_set(this->buffer, pos - 1, (void *)&tmp);
+    this->state.previous_char_was_comment_mark = false;
 }

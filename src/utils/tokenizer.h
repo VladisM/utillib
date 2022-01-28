@@ -28,6 +28,7 @@ typedef struct tokenizer_s{
     queue_t *output;
     struct{
         bool comment_block_active;
+        bool previous_char_was_comment_mark;
         bool string_block_active;
         char current_char;
         char previous_char;
