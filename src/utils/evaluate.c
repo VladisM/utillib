@@ -244,7 +244,6 @@ static evaluator_op_record_t *get_op_record(evaluator_t *this, char *s){
     }
 
     error("Can't found operator! Use is_operator() before calling get_op_record()!");
-    return NULL; //to make compiler happy, as error call exit()
 }
 
 static evaluator_function_record_t *get_func_record(evaluator_t *this, char *s){
@@ -261,7 +260,6 @@ static evaluator_function_record_t *get_func_record(evaluator_t *this, char *s){
     }
 
     error("Can't found operator! Use is_function() before calling get_func_record()!");
-    return NULL; //to make compiler happy, as error call exit()
 }
 
 static bool can_be_variable(evaluator_t *this, char *s){

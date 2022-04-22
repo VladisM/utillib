@@ -18,7 +18,7 @@
  *
  * @param err_msg Message that will be shown at program exit.
  */
-extern void error(char *err_msg);
+extern void  __attribute__((noreturn)) error(char *err_msg);
 
 #endif
 

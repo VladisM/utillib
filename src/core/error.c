@@ -45,4 +45,5 @@ void error(char *err_msg){
 
     fflush(stderr);
     exit(EXIT_FAILURE);
+    while(1);
 }
