@@ -23,6 +23,8 @@ linked lists, converting numbers, argument parsing and so on.
 * core/string.c - C now have dynamically reallocated string object.
 * cli/options.c - Argument parsing.
 * cli/question.c - Simplify user input.
+* files/ihex.c - Support for Intel Hex files.
+* files/mif.c - Support for memory initialization format used in Quartus.
 * utils/convert.c - Parsing strings to number.
 * utils/error_buffer.c - Accommodate error string.
 * utils/evaluate.c - Calculator! Convert infix to postfix and solve it.
@@ -32,7 +34,7 @@ Build
 -----------------------
 
 To build this library you can use CMakeLists.txt included in repository.
-At this time, 3 static library will be build.
+At this time, 4 static libraries will be build.
 
 Documentation
 -----------------------
