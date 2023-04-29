@@ -14,5 +14,6 @@
 #include "../../src/core/atexit.h"
 #include "../../src/core/check.h"
 #include "../../src/core/string.h"
+#include "../../src/core/buffer.h"
 
 #endif

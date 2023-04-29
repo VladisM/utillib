@@ -30,6 +30,7 @@ add_library(utillib-core
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/atexit.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/check.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/string.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/buffer.c
 )
 add_library(utillib-cli
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cli/options.c

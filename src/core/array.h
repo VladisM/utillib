@@ -94,6 +94,15 @@ extern void array_enlarge(array_t *ptr);
 extern unsigned array_get_size(array_t *ptr);
 
 /**
+ * @brief Get actual size of one element in array.
+ *
+ * @param ptr Pointer to array object.
+ *
+ * @return SIze of one element in array.
+ */
+extern size_t array_get_element_size(array_t *ptr);
+
+/**
  * @brief Get pointer to raw data, to work with array object as regular array.
  *
  * @param ptr Pointer to array object.

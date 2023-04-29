@@ -102,6 +102,12 @@ unsigned array_get_size(array_t *ptr){
     return ptr->element_count;
 }
 
+size_t array_get_element_size(array_t *ptr){
+    CHECK_NULL_ARGUMENT(ptr);
+
+    return ptr->element_size;
+}
+
 void *array_get_data(array_t *ptr){
     CHECK_NULL_ARGUMENT(ptr);
 
