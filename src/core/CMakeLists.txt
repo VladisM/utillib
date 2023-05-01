@@ -16,14 +16,14 @@ set(inc
 )
 
 set(src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/list.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/dynmem.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/array.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/error.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/atexit.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/check.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/string.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/buffer.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/check.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dynmem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/error.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/list.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/string.c
 )
 
 set(target utillib-core)

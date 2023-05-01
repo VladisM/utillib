@@ -6,9 +6,9 @@ set(inc
 )
 
 set(src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ihex.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/mif.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/common.c
 )
 
 set(target utillib-files)

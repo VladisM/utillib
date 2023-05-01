@@ -7,9 +7,9 @@ set(inc
 
 set(src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/convert.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tokenizer.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/error_buffer.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/evaluate.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tokenizer.c
 )
 
 set(target utillib-utils)

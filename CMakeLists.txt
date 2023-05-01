@@ -10,7 +10,7 @@ set(BUILD_STATIC_LIBS ON)
 
 add_compile_options(-Wall -Wextra)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_FILE}src/core)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_FILE}src/cli)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_FILE}src/core)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_FILE}src/files)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_FILE}src/utils)
