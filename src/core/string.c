@@ -76,9 +76,9 @@ void string_concatenate(string_t *s1, string_t *s2){
     char *s1_data = array_get_data(s1);
     char *s2_data = array_get_data(s2);
 
-    long size_needed = strlen(s1_data) + strlen(s2_data) + 1;
+    size_t size_needed = strlen(s1_data) + strlen(s2_data) + 1;
 
-    while(size_needed > array_get_size(s1)){
+    while(size_needed > (size_t)array_get_size(s1)){
         array_enlarge(s1);
     }
 
@@ -100,9 +100,9 @@ void string_puts(string_t *s, char *data){
         return;
     }
 
-    long size_needed = strlen(data) + 1;
+    size_t size_needed = strlen(data) + 1;
 
-    while(size_needed > array_get_size(s)){
+    while(size_needed > (size_t)array_get_size(s)){
         array_enlarge(s);
     }
 

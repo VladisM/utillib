@@ -18,7 +18,7 @@ static list_item_t *_at(list_t *list, long position);
 static void _destroy(list_t *list);
 
 // -------------------------------------
-// Implemenation of core functionality
+// Implementation of core functionality
 
 static list_t *_new_list(size_t item_size){
     list_t *tmp = NULL;
@@ -59,7 +59,7 @@ static void _free_list(list_t *list){
 }
 
 static void _append_item(list_t *list, list_item_t *item, long position){
-    if(position == list->count)
+    if((unsigned)position == list->count)
         position = -1;
 
     if(list->count > 0){
@@ -96,7 +96,7 @@ static void _append_item(list_t *list, list_item_t *item, long position){
 static list_item_t *_takeout_item(list_t *list, long position){
     list_item_t *tmp = NULL;
 
-    if(position == list->count - 1)
+    if((unsigned)position == list->count - 1)
         position = -1;
 
     if(position == -1){
@@ -145,7 +145,7 @@ static list_item_t *_takeout_item(list_t *list, long position){
 static list_item_t *_at(list_t *list, long position){
     list_item_t *tmp = NULL;
 
-    if(position == list->count - 1)
+    if((unsigned)position == list->count - 1)
         position = -1;
 
     if(position == -1){
@@ -181,7 +181,7 @@ static void _destroy(list_t *list){
 }
 
 // -------------------------------------
-// Implemenation of generic lists
+// Implementation of generic lists
 
 void list_init(list_t **list, size_t item_size){
     CHECK_NULL_ARGUMENT(list);

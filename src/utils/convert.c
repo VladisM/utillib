@@ -24,8 +24,10 @@ bool is_hex_number(char *s){
     if(strncmp(s, "0x", 2) != 0)
         return false;
 
-    for(int i = 2; s[i] != '\0'; i++)
-        if(isxdigit(s[i]) == 0) return false;
+    for(unsigned i = 2; s[i] != '\0'; i++){
+        char x = s[i];
+        if(isxdigit(x) == 0) return false;
+    }
 
     return true;
 }
@@ -41,9 +43,11 @@ bool is_dec_number(char *s){
     if(s[0] == '0')
         return false;
 
-    for(int i = 0; s[i] != '\0'; i++){
-        if(s[i] == '-' && i == 0 && s[i + 1] != '\0') continue;
-        if(isdigit(s[i]) == 0) return false;
+    for(unsigned i = 0; s[i] != '\0'; i++){
+        char x = s[i];
+        char xp1 = s[i + 1];
+        if(x == '-' && i == 0 && xp1 != '\0') continue;
+        if(isdigit(x) == 0) return false;
     }
 
     return true;
@@ -60,8 +64,9 @@ bool is_oct_number(char *s){
     if(s[0] != '0')
         return false;
 
-    for(int i = 1; s[i] != '\0'; i++){
-        if(isdigit(s[i]) == 0 || s[i] == '8' || s[i] == '9' ) return false;
+    for(unsigned i = 1; s[i] != '\0'; i++){
+        char x = s[i];
+        if(isdigit(x) == 0 || x == '8' || x == '9' ) return false;
     }
 
     return true;

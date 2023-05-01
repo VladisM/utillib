@@ -277,10 +277,11 @@ static bool can_be_variable(evaluator_t *this, char *s){
     }
 
     for(unsigned i = 0; s[i] != '\0'; i++){
-        if((isalnum(s[i]) == 0) && (s[i] != '_') && (i > 0))
+        char x = s[i];
+        if((isalnum(x) == 0) && (x != '_') && (i > 0))
             return false;
 
-        if((isalpha(s[i]) == 0) && (s[i] != '_') && (i == 0))
+        if((isalpha(x) == 0) && (x != '_') && (i == 0))
             return false;
     }
 
@@ -592,56 +593,61 @@ _end:
 // basic math
 
 static bool evaluate_basic_math_add(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0, _B = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    if(!evaluator_convert(this, args, 1, &_B)) return false;
-    *result = _A + _B;
+    long long a = 0;
+    long long b = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    if(!evaluator_convert(this, args, 1, &b)) return false;
+    *result = a + b;
     return true;
 }
 
 static bool evaluate_basic_math_sub(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0, _B = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    if(!evaluator_convert(this, args, 1, &_B)) return false;
-    *result = _A - _B;
+    long long a = 0;
+    long long b = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    if(!evaluator_convert(this, args, 1, &b)) return false;
+    *result = a - b;
     return true;
 }
 
 static bool evaluate_basic_math_mul(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0, _B = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    if(!evaluator_convert(this, args, 1, &_B)) return false;
-    *result = _A * _B;
+    long long a = 0;
+    long long b = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    if(!evaluator_convert(this, args, 1, &b)) return false;
+    *result = a * b;
     return true;
 }
 
 static bool evaluate_basic_math_div(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0, _B = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    if(!evaluator_convert(this, args, 1, &_B)) return false;
-    *result = _A / _B;
+    long long a = 0;
+    long long b = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    if(!evaluator_convert(this, args, 1, &b)) return false;
+    *result = a / b;
     return true;
 }
 
 static bool evaluate_basic_math_pow(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0, _B = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    if(!evaluator_convert(this, args, 1, &_B)) return false;
-    *result = (long long)pow(_A, _B);
+    long long a = 0;
+    long long b = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    if(!evaluator_convert(this, args, 1, &b)) return false;
+    *result = (long long)pow(a, b);
     return true;
 }
 
 static bool evaluate_basic_math_log(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    *result = (long long)log10(_A);
+    long long a = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    *result = (long long)log10(a);
     return true;
 }
 
 static bool evaluate_basic_math_log2(evaluator_t *this, long long *result, list_t *args){
-    long long _A = 0;
-    if(!evaluator_convert(this, args, 0, &_A)) return false;
-    *result = (long long)log2(_A);
+    long long a = 0;
+    if(!evaluator_convert(this, args, 0, &a)) return false;
+    *result = (long long)log2(a);
     return true;
 }
 

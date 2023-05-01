@@ -13,7 +13,7 @@ static void _free_array(array_t *array);
 static void _double_size(array_t *array);
 
 // -------------------------------------
-// Implemenation of core functionality
+// Implementation of core functionality
 
 static array_t *_new_array(size_t element_size, unsigned element_count){
     array_t *tmp_array = NULL;
@@ -24,6 +24,9 @@ static array_t *_new_array(size_t element_size, unsigned element_count){
 
     dynmem_check_malloc(tmp_array);
     dynmem_check_malloc(tmp_data);
+
+    memset(tmp_data, 0, element_count * element_size);
+    memset(tmp_array, 0, sizeof(array_t));
 
     tmp_array->element_count = element_count;
     tmp_array->element_size = element_size;
@@ -69,7 +72,7 @@ static void _clear_data(array_t *array){
 }
 
 // -------------------------------------
-// Implemenation of generic arrays
+// Implementation of generic arrays
 
 void array_init(array_t **ptr, size_t element_size, unsigned element_count){
     CHECK_NULL_ARGUMENT(ptr);
