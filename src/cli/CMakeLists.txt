@@ -7,6 +7,7 @@ set(inc
 
 set(src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/options.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/progress_bar.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/question.c
 )
 

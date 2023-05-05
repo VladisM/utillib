@@ -15,9 +15,9 @@
 
 #include <stdbool.h>
 
-extern bool question_yes_no(char *s);
-extern bool question_YES_no(char *s);
-extern bool question_yes_NO(char *s);
+extern bool question_yes_no(char *fmt, ...);
+extern bool question_YES_no(char *fmt, ...);
+extern bool question_yes_NO(char *fmt, ...);
 
 extern char *user_input_string(char *s);
 extern long long user_input_number(char *s);

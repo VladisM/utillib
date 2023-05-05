@@ -8,6 +8,7 @@
 #define CLI_H_included
 
 #include "../../src/cli/src/options.h"
+#include "../../src/cli/src/progress_bar.h"
 #include "../../src/cli/src/question.h"
 
 #endif

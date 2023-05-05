@@ -2,6 +2,7 @@
 
 #include "config.h"
 
+#include <stdarg.h>
 #include <utillib/core.h>
 #include <utillib/utils.h>
 
@@ -62,7 +63,7 @@ static void sanitize(array_t *in, array_t *out){
     }
 }
 
-static bool _question(char *question, char *select, bool enable_default, bool default_value){
+static bool __question(char *question, char *select, bool enable_default, bool default_value){
     bool ret_val = default_value;
 
     array_t *response_array = NULL;
@@ -120,16 +121,78 @@ static bool _question(char *question, char *select, bool enable_default, bool de
     return ret_val;
 }
 
-bool question_yes_no(char *s){
-    return _question(s, "[y/n]", false, false);
+static bool _question(char *fmt, va_list args, char *select, bool enable_default, bool default_value){
+    va_list args_1;
+    va_list args_2;
+
+    va_copy(args_1, args);
+    va_copy(args_2, args);
+
+    int len_1 = vsnprintf(NULL, 0, fmt, args_1);
+    char *s = (char *)dynmem_malloc(((sizeof(char) * len_1) + 1));
+    int len_2 = vsnprintf(s, len_1 + 1, fmt, args_2);
+
+    va_end(args_1);
+    va_end(args_2);
+
+    if(len_2 != len_1){
+        dynmem_free(s);
+        error("Failed to generate question!");
+    }
+
+    bool retVal = __question(s, select, enable_default, default_value);
+
+    dynmem_free(s);
+
+    return retVal;
 }
 
-bool question_YES_no(char *s){
-    return _question(s, "[Y/n]", true, true);
+bool question_yes_no(char *fmt, ...){
+    bool retVal = false;
+
+    if(fmt == NULL){
+        retVal = __question("", "[y/n]", false, false);
+    }
+    else{
+        va_list args;
+        va_start(args, fmt);
+        retVal = _question(fmt, args, "[y/n]", false, false);
+        va_end(args);
+    }
+
+    return retVal;
 }
 
-bool question_yes_NO(char *s){
-    return _question(s, "[y/N]", true, false);
+bool question_YES_no(char *fmt, ...){
+    bool retVal = false;
+
+    if(fmt == NULL){
+        retVal = __question("", "[Y/n]", true, true);
+    }
+    else{
+        va_list args;
+        va_start(args, fmt);
+        retVal = _question(fmt, args, "[Y/n]", true, true);
+        va_end(args);
+    }
+
+    return retVal;
+}
+
+bool question_yes_NO(char *fmt, ...){
+    bool retVal = false;
+
+    if(fmt == NULL){
+        retVal = __question("", "[y/N]", true, false);
+    }
+    else{
+        va_list args;
+        va_start(args, fmt);
+        retVal = _question(fmt, args, "[y/N]", true, false);
+        va_end(args);
+    }
+
+    return retVal;
 }
 
 char *user_input_string(char *s){
