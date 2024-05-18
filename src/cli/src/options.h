@@ -32,7 +32,7 @@ typedef struct {
     char *about;
     char *footer;
     unsigned output_width;
-    error_t *error_buffer;
+    error_buffer_t *error_buffer;
 } options_t;
 
 extern void options_init(options_t **this, char *version, char *prog_name);

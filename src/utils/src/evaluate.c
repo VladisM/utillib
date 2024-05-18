@@ -50,6 +50,8 @@ void evaluate_new(evaluator_t **evaluator){
     (*evaluator)->op_records = NULL;
 
     error_buffer_init(&((*evaluator)->error_buffer));
+    (*evaluator)->error_buffer_allocated = true;
+
     list_init(&((*evaluator)->func_records), sizeof(evaluator_function_record_t *));
     list_init(&((*evaluator)->op_records), sizeof(evaluator_op_record_t *));
 }
@@ -57,7 +59,7 @@ void evaluate_new(evaluator_t **evaluator){
 void evaluate_destroy(evaluator_t *evaluator){
     CHECK_NULL_ARGUMENT(evaluator);
 
-    if(evaluator->error_buffer != NULL){
+    if(evaluator->error_buffer_allocated == true && evaluator->error_buffer != NULL){
         error_buffer_destroy(evaluator->error_buffer);
     }
 
@@ -81,6 +83,18 @@ void evaluate_destroy(evaluator_t *evaluator){
     }
 
     dynmem_free(evaluator);
+}
+
+void evaluate_error_buffer_set(evaluator_t *evaluator, error_buffer_t *error_buffer){
+    CHECK_NULL_ARGUMENT(evaluator);
+    CHECK_NULL_ARGUMENT(error_buffer);
+
+    if(evaluator->error_buffer_allocated == true && evaluator->error_buffer != NULL){
+        error_buffer_destroy(evaluator->error_buffer);
+    }
+
+    evaluator->error_buffer = error_buffer;
+    evaluator->error_buffer_allocated = false;
 }
 
 void evaluate_append_function(evaluator_t *this, char *func_name, unsigned argc, bool (*compute_function)()){

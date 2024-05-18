@@ -58,10 +58,11 @@ typedef enum {
  * @brief Evaluator object.
  */
 typedef struct {
-    error_t *error_buffer;
+    error_buffer_t *error_buffer;
     list_t *op_records;
     list_t *func_records;
     bool (*variable_resolve_callback)(char *variable_name, long long *value);
+    bool error_buffer_allocated;
 } evaluator_t;
 
 /**
@@ -77,6 +78,16 @@ void evaluate_new(evaluator_t **evaluator);
  * @param evaluator Pointer to object.
  */
 void evaluate_destroy(evaluator_t *evaluator);
+
+/**
+ * @brief Set new error buffer to existing evaluator object.
+ *
+ * @param evaluator Pointer to evaluator object.
+ * @param error_buffer Pointer to new error buffer object.
+ *
+ * @note This function will free only error buffer that was allocated by evaluator itself.
+ */
+void evaluate_error_buffer_set(evaluator_t *evaluator, error_buffer_t *error_buffer);
 
 /**
  * @brief Append function into math engine.

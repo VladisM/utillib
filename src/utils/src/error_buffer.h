@@ -16,21 +16,21 @@
 
 #include <utillib/core.h>
 
-typedef string_t error_t;
+typedef string_t error_buffer_t;
 
 /**
  * @brief Initialize string buffer.
  *
  * @param error_buffer Pointer to buffer to work with.
  */
-void error_buffer_init(error_t **error_buffer);
+void error_buffer_init(error_buffer_t **error_buffer);
 
 /**
  * @brief Destroy and free memory used by buffer.
  *
  * @param error_buffer Pointer to buffer to work with.
  */
-void error_buffer_destroy(error_t *error_buffer);
+void error_buffer_destroy(error_buffer_t *error_buffer);
 
 /**
  * @brief Get error message currently set.
@@ -38,7 +38,7 @@ void error_buffer_destroy(error_t *error_buffer);
  * @param error_buffer Pointer to buffer to work with.
  * @return char* Error message.
  */
-char * error_buffer_get(error_t *error_buffer);
+char * error_buffer_get(error_buffer_t *error_buffer);
 
 /**
  * @brief Append into error message. Each call will be separated with '\r\n'
@@ -48,7 +48,7 @@ char * error_buffer_get(error_t *error_buffer);
  * @param fmt Printf-like format.
  * @param ... Printf-like arguments.
  */
-void error_buffer_write(error_t *error_buffer, char *fmt, ...);
+void error_buffer_write(error_buffer_t *error_buffer, char *fmt, ...);
 
 #endif
 

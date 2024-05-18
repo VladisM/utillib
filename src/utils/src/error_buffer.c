@@ -2,20 +2,20 @@
 
 #include <utillib/core.h>
 
-void error_buffer_init(error_t **error_buffer){
+void error_buffer_init(error_buffer_t **error_buffer){
     string_init((string_t **)error_buffer);
 }
 
-void error_buffer_destroy(error_t *error_buffer){
+void error_buffer_destroy(error_buffer_t *error_buffer){
     string_destroy((string_t *)error_buffer);
 }
 
-char * error_buffer_get(error_t *error_buffer){
+char * error_buffer_get(error_buffer_t *error_buffer){
     CHECK_NULL_ARGUMENT(error_buffer);
     return string_get(error_buffer);
 }
 
-void error_buffer_write(error_t *error_buffer, char *fmt, ...){
+void error_buffer_write(error_buffer_t *error_buffer, char *fmt, ...){
     CHECK_NULL_ARGUMENT(fmt);
     CHECK_NULL_ARGUMENT(error_buffer);
 
