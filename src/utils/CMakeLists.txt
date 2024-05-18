@@ -10,6 +10,7 @@ set(src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/error_buffer.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/evaluate.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/tokenizer.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/string_cache.c
 )
 
 set(target utillib-utils)

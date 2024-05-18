@@ -11,5 +11,6 @@
 #include "../../src/utils/src/error_buffer.h"
 #include "../../src/utils/src/evaluate.h"
 #include "../../src/utils/src/tokenizer.h"
+#include "../../src/utils/src/string_cache.h"
 
 #endif

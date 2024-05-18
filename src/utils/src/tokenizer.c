@@ -7,9 +7,11 @@
 
 #include <utillib/core.h>
 
+#include "string_cache.h"
+
 #define CHUNK_SIZE_FOR_READING_FILE 1024
 
-static list_t *filename_cache = NULL;
+static string_cache_t *filename_cache = NULL;
 
 static token_t *tokenizer_token_new(char *token_data, char *filename, long line_number, long column);
 static char *filename_store(char *filename);
@@ -375,35 +377,16 @@ static char *filename_store(char *filename){
     CHECK_NULL_ARGUMENT(filename);
 
     if(filename_cache == NULL){
-        list_init(&filename_cache, sizeof(char *));
+        string_cache_new(&filename_cache);
         atexit_register(&clean_filename_cache);
     }
 
-    for(unsigned int i = 0; i < list_count(filename_cache); i++){
-        char *filename_cache_head = NULL;
-        list_at(filename_cache, i, (void *)&filename_cache_head);
-
-        if(strcmp(filename_cache_head, filename) == 0){
-            return filename_cache_head;
-        }
-    }
-
-    char *tmp = dynmem_strdup(filename);
-
-    list_append(filename_cache, (void *)&tmp);
-
-    return tmp;
+    return string_cache_process(filename_cache, filename);
 }
 
 static void clean_filename_cache(void){
     if(filename_cache != NULL){
-        while(queue_count(filename_cache) > 0){
-            char *tmp = NULL;
-            queue_windraw(filename_cache, (void *)&tmp);
-            dynmem_free(tmp);
-        }
-        list_destroy(filename_cache);
-        filename_cache = NULL;
+        string_cache_destroy(filename_cache);
     }
 }
 
