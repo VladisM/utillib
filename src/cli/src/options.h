@@ -20,7 +20,7 @@
 #include <utillib/core.h>
 #include <utillib/utils.h>
 
-#include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 typedef struct {
@@ -66,7 +66,7 @@ extern bool options_is_flag_set(options_t *this, char *s);
 extern bool options_is_option_set(options_t *this, char *s);
 
 extern bool options_get_option_value_string(options_t *this, char *s, char **val);
-extern bool options_get_option_value_number(options_t *this, char *s, long long *val);
+extern bool options_get_option_value_number(options_t *this, char *s, intmax_t *val);
 extern void options_get_option_multiple_values_string(options_t *this, char *s, list_t **val);
 
 extern void options_config_output_width(options_t *this, unsigned width);

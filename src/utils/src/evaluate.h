@@ -17,7 +17,7 @@
  *
  * @code{.c}
  * evaluator_t *evaluator = NULL;
- * long long result = 0;
+ * intmax_t result = 0;
  *
  * evaluate_new(&evaluator);
  * evaluate_load_basic_math(evaluator);
@@ -42,6 +42,8 @@
 #ifndef EVALUATE_H_included
 #define EVALUATE_H_included
 
+#include <stdint.h>
+
 #include <utillib/core.h>
 
 #include "error_buffer.h"
@@ -61,7 +63,7 @@ typedef struct {
     error_buffer_t *error_buffer;
     list_t *op_records;
     list_t *func_records;
-    bool (*variable_resolve_callback)(char *variable_name, long long *value);
+    bool (*variable_resolve_callback)(char *variable_name, intmax_t *value);
     bool error_buffer_allocated;
 } evaluator_t;
 
@@ -101,7 +103,7 @@ void evaluate_append_function(
     evaluator_t *this,
     char *func_name,
     unsigned argc,
-    bool (*compute_function)(evaluator_t *this, long long *result, list_t *args)
+    bool (*compute_function)(evaluator_t *this, intmax_t *result, list_t *args)
 );
 
 /**
@@ -123,7 +125,7 @@ void evaluate_append_operator(
     int precedence,
     evaluator_op_associativity_t associativity,
     unsigned argc,
-    bool (*compute_function)(evaluator_t *this, long long *result, list_t *args)
+    bool (*compute_function)(evaluator_t *this, intmax_t *result, list_t *args)
 );
 
 /**
@@ -147,7 +149,7 @@ void evaluate_append_operator(
  * (see void evaluate_register_variable_callback()) then this method also try
  * resolve arguments as variables.
  */
-bool evaluator_convert(evaluator_t *this, list_t *args, unsigned int arg_pos, long long *output);
+bool evaluator_convert(evaluator_t *this, list_t *args, unsigned int arg_pos, intmax_t *output);
 
 /**
  * @brief Solve mathematical expression with given evaluator.
@@ -160,7 +162,7 @@ bool evaluator_convert(evaluator_t *this, list_t *args, unsigned int arg_pos, lo
  *
  * @note Appropiate error msg can be obtained by evaluate_error()
  */
-bool evaluate_expression(evaluator_t *this, char *expresion, long long *result);
+bool evaluate_expression(evaluator_t *this, char *expresion, intmax_t *result);
 
 /**
  * @brief Solve mathematical expression with given evaluator.
@@ -173,7 +175,7 @@ bool evaluate_expression(evaluator_t *this, char *expresion, long long *result);
  *
  * @note Appropiate error msg can be obtained by evaluate_error()
  */
-bool evaluate_expression_string(evaluator_t *this, string_t *expresion, long long *result);
+bool evaluate_expression_string(evaluator_t *this, string_t *expresion, intmax_t *result);
 
 /**
  * @brief Give error msg.
@@ -216,7 +218,7 @@ void evaluate_load_basic_math(evaluator_t *this);
  */
 void evaluate_register_variable_callback(
     evaluator_t *this,
-    bool (*variable_resolve_callback)(char *variable_name, long long *value)
+    bool (*variable_resolve_callback)(char *variable_name, intmax_t *value)
 );
 
 #endif

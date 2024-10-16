@@ -238,7 +238,7 @@ bool options_get_option_value_string(options_t *this, char *s, char **val){
     return false;
 }
 
-bool options_get_option_value_number(options_t *this, char *s, long long *val){
+bool options_get_option_value_number(options_t *this, char *s, intmax_t *val){
     CHECK_NULL_ARGUMENT(this);
     CHECK_NULL_ARGUMENT(s);
     CHECK_NULL_ARGUMENT(val);
@@ -253,7 +253,7 @@ bool options_get_option_value_number(options_t *this, char *s, long long *val){
         return false;
     }
 
-    if(!str_to_num(tmp_string, val))
+    if(!str_to_num_signed(tmp_string, val))
         error("Function is_number returned true but can't convert!");
 
     return true;

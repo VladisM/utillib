@@ -6,6 +6,7 @@
 
 #include <utillib/core.h>
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -14,7 +15,7 @@
 
 typedef struct {
     union{
-        long long number;
+        intmax_t number;
         char *text;
     }payload;
     bool is_num;
@@ -25,19 +26,19 @@ typedef struct {
     int precedence;
     evaluator_op_associativity_t associativity;
     unsigned arg_count;
-    bool (*compute_fun)(evaluator_t *this, long long *result, list_t *args);
+    bool (*compute_fun)(evaluator_t *this, intmax_t *result, list_t *args);
 } evaluator_op_record_t;
 
 typedef struct {
     char *func;
     unsigned arg_count;
-    bool (*compute_fun)(evaluator_t *this, long long *result, list_t *args);
+    bool (*compute_fun)(evaluator_t *this, intmax_t *result, list_t *args);
 } evaluator_function_record_t;
 
 static void parse(char *input, queue_t **output);
 static bool sort_infix_to_postfix(evaluator_t *this, queue_t *input, queue_t **output);
-static bool solve(evaluator_t *this, queue_t *rpn_expresion, long long *result);
-static bool _evaluator_convert(evaluator_t *this, stack_value_t *input, long long *output);
+static bool solve(evaluator_t *this, queue_t *rpn_expresion, intmax_t *result);
+static bool _evaluator_convert(evaluator_t *this, stack_value_t *input, intmax_t *output);
 
 void evaluate_new(evaluator_t **evaluator){
     CHECK_NULL_ARGUMENT(evaluator);
@@ -126,7 +127,7 @@ void evaluate_append_operator(evaluator_t *this, char op, int precedence, evalua
     list_append(this->op_records, (void *)&new_record);
 }
 
-bool evaluate_expression(evaluator_t *this, char *expresion, long long *result){
+bool evaluate_expression(evaluator_t *this, char *expresion, intmax_t *result){
     CHECK_NULL_ARGUMENT(this);
     CHECK_NULL_ARGUMENT(expresion);
     CHECK_NULL_ARGUMENT(result);
@@ -163,7 +164,7 @@ bool evaluate_expression(evaluator_t *this, char *expresion, long long *result){
     return true;
 }
 
-bool evaluate_expression_string(evaluator_t *this, string_t *expresion, long long *result){
+bool evaluate_expression_string(evaluator_t *this, string_t *expresion, intmax_t *result){
     CHECK_NULL_ARGUMENT(this);
     CHECK_NULL_ARGUMENT(expresion);
     CHECK_NULL_ARGUMENT(result);
@@ -184,7 +185,7 @@ void evaluate_clear_error(evaluator_t *this){
     error_buffer_init(&(this->error_buffer));
 }
 
-bool evaluator_convert(evaluator_t *this, list_t *args, unsigned int arg_pos, long long *output){
+bool evaluator_convert(evaluator_t *this, list_t *args, unsigned int arg_pos, intmax_t *output){
     CHECK_NULL_ARGUMENT(this);
     CHECK_NULL_ARGUMENT(args);
     CHECK_NULL_ARGUMENT(output);
@@ -195,7 +196,7 @@ bool evaluator_convert(evaluator_t *this, list_t *args, unsigned int arg_pos, lo
     return _evaluator_convert(this, input, output);
 }
 
-void evaluate_register_variable_callback(evaluator_t *this, bool (*variable_resolve_callback)(char *variable_name, long long *value)){
+void evaluate_register_variable_callback(evaluator_t *this, bool (*variable_resolve_callback)(char *variable_name, intmax_t *value)){
     CHECK_NULL_ARGUMENT(this);
     CHECK_NULL_ARGUMENT(variable_resolve_callback);
 
@@ -302,14 +303,14 @@ static bool can_be_variable(evaluator_t *this, char *s){
     return true;
 }
 
-static bool _evaluator_convert(evaluator_t *this, stack_value_t *input, long long *output){
+static bool _evaluator_convert(evaluator_t *this, stack_value_t *input, intmax_t *output){
     if(input->is_num == true){
         *output =  input->payload.number;
         return true;
     }
     else{
         if(is_number(input->payload.text)){
-            str_to_num(input->payload.text, output);
+            str_to_num_signed(input->payload.text, output);
             return true;
         }
 
@@ -487,7 +488,7 @@ static void append_to_stack_from_string(stack_t *stack, char *string, queue_t *t
     stack_push(stack, (void *)&value);
 }
 
-static void append_to_stack_from_number(stack_t *stack, long long number, queue_t *to_free){
+static void append_to_stack_from_number(stack_t *stack, intmax_t number, queue_t *to_free){
     CHECK_NULL_ARGUMENT(stack);
     CHECK_NULL_ARGUMENT(to_free);
 
@@ -499,7 +500,7 @@ static void append_to_stack_from_number(stack_t *stack, long long number, queue_
     stack_push(stack, (void *)&value);
 }
 
-static bool solve(evaluator_t *this, queue_t *rpn_expresion, long long *result){
+static bool solve(evaluator_t *this, queue_t *rpn_expresion, intmax_t *result){
     CHECK_NULL_ARGUMENT(this);
     CHECK_NULL_ARGUMENT(rpn_expresion);
     CHECK_NULL_ARGUMENT(result);
@@ -523,7 +524,7 @@ static bool solve(evaluator_t *this, queue_t *rpn_expresion, long long *result){
             append_to_stack_from_string(stack, token, to_free);
         }
         else if(is_operator(this, token) || is_function(this, token)){
-            bool (*func)(evaluator_t *this, long long *result, list_t *args) = NULL;
+            bool (*func)(evaluator_t *this, intmax_t *result, list_t *args) = NULL;
             unsigned int argc_needed = 0;
 
             if(is_operator(this, token)){
@@ -546,7 +547,7 @@ static bool solve(evaluator_t *this, queue_t *rpn_expresion, long long *result){
             list_t *args = NULL;
             list_init(&args, sizeof(stack_value_t *));
 
-            long long op_result = 0;
+            intmax_t op_result = 0;
 
             for(unsigned int i = 0; i < argc_needed; i++){
                 stack_value_t *tmp = NULL;
@@ -606,62 +607,62 @@ _end:
 //------------------------------------------------------------------------------
 // basic math
 
-static bool evaluate_basic_math_add(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
-    long long b = 0;
+static bool evaluate_basic_math_add(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
+    intmax_t b = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
     if(!evaluator_convert(this, args, 1, &b)) return false;
     *result = a + b;
     return true;
 }
 
-static bool evaluate_basic_math_sub(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
-    long long b = 0;
+static bool evaluate_basic_math_sub(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
+    intmax_t b = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
     if(!evaluator_convert(this, args, 1, &b)) return false;
     *result = a - b;
     return true;
 }
 
-static bool evaluate_basic_math_mul(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
-    long long b = 0;
+static bool evaluate_basic_math_mul(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
+    intmax_t b = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
     if(!evaluator_convert(this, args, 1, &b)) return false;
     *result = a * b;
     return true;
 }
 
-static bool evaluate_basic_math_div(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
-    long long b = 0;
+static bool evaluate_basic_math_div(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
+    intmax_t b = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
     if(!evaluator_convert(this, args, 1, &b)) return false;
     *result = a / b;
     return true;
 }
 
-static bool evaluate_basic_math_pow(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
-    long long b = 0;
+static bool evaluate_basic_math_pow(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
+    intmax_t b = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
     if(!evaluator_convert(this, args, 1, &b)) return false;
-    *result = (long long)pow(a, b);
+    *result = (intmax_t)pow(a, b);
     return true;
 }
 
-static bool evaluate_basic_math_log(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
+static bool evaluate_basic_math_log(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
-    *result = (long long)log10(a);
+    *result = (intmax_t)log10(a);
     return true;
 }
 
-static bool evaluate_basic_math_log2(evaluator_t *this, long long *result, list_t *args){
-    long long a = 0;
+static bool evaluate_basic_math_log2(evaluator_t *this, intmax_t *result, list_t *args){
+    intmax_t a = 0;
     if(!evaluator_convert(this, args, 0, &a)) return false;
-    *result = (long long)log2(a);
+    *result = (intmax_t)log2(a);
     return true;
 }
 

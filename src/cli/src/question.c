@@ -217,9 +217,9 @@ char *user_input_string(char *s){
     return tmp;
 }
 
-long long user_input_number(char *s){
+intmax_t user_input_number(char *s){
     char *ret = NULL;
-    long long x = 0;
+    intmax_t x = 0;
 
     while(true){
         ret = user_input_string(s);
@@ -235,7 +235,7 @@ long long user_input_number(char *s){
         }
     }
 
-    if(str_to_num(ret, &x) == false)
+    if(str_to_num_signed(ret, &x) == false)
         error("Cannot convert string to number!");
 
     dynmem_free(ret);

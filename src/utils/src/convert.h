@@ -12,7 +12,7 @@
  * To convert string into number there is str_to_num() function that will do
  * exactly that. This function also handle different numeric base automatically.
  *
- * All conversions are made using long long type, so basically 64bits, if you
+ * All conversions are made using intmax_t type, so basically 64bits, if you
  * want to store result in smaller variable, there is function can_fit_in() to
  * check if number can be safely stored.
  *
@@ -21,7 +21,7 @@
  *
  * @code{.c}
  * char *input_string = "0x1FF";
- * long long tmp = 0;
+ * intmax_t tmp = 0;
  * uint8_t out = 0;
  *
  * if(!is_number(input_string))
@@ -49,6 +49,7 @@
 #ifndef CONVERT_H_included
 #define CONVERT_H_included
 
+#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <utillib/core.h>
@@ -114,8 +115,10 @@ extern bool is_bin_number_1(string_t *s);
  *
  * @return True or false to signalize if convert was successful.
  */
-extern bool str_to_num(char *s, long long *x);
-extern bool str_to_num_1(string_t *s, long long *x);
+extern bool str_to_num_signed(char *s, intmax_t *x);
+extern bool str_to_num_signed_string(string_t *s, intmax_t *x);
+extern bool str_to_num_unsigned(char *s, uintmax_t *x);
+extern bool str_to_num_unsigned_string(string_t *s, uintmax_t *x);
 
 /**
  * @brief Check if given number can be fitted in specified type.
@@ -125,7 +128,12 @@ extern bool str_to_num_1(string_t *s, long long *x);
  *
  * @return true/false
  */
-extern bool can_fit_in(long long x, size_t size);
+extern bool can_fit_in_size_unsigned(uintmax_t x, size_t size);
+extern bool can_fit_in_bytes_unsigned(uintmax_t x, unsigned bytes);
+extern bool can_fit_in_bits_unsigned(uintmax_t x, unsigned bits);
+extern bool can_fit_in_size_signed(intmax_t x, size_t size);
+extern bool can_fit_in_bytes_signed(intmax_t x, unsigned bytes);
+extern bool can_fit_in_bits_signed(intmax_t x, unsigned bits);
 
 #endif
 
